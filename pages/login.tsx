@@ -1,4 +1,4 @@
-import { TelegramProvider } from '../contexts/TelegramProvider';
+import { TelegramProvider, useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from "react";
 import {
     InputLabel,
@@ -8,6 +8,7 @@ import {
     Button,
 } from "@mui/material";
 import { supabase } from '../lib/initSupabase';
+import { MainButton } from '../components/MainButton';
 
 const Login = ({ user }: {
     user: string
@@ -15,6 +16,8 @@ const Login = ({ user }: {
     const [country, setCountry] = useState("")
     const [city, setCity] = useState("")
 
+    const { webApp } = useTelegram();
+console.log(webApp);
     const handleSubmit = () => {
         // TODO
     }
@@ -60,8 +63,11 @@ const Login = ({ user }: {
     // Show the user. No loading state is required
     return (
         <TelegramProvider>
-            <form autoComplete="off" onSubmit={handleSubmit}>
-                <FormControl fullWidth>
+            <form autoComplete="off" onSubmit={handleSubmit}
+                style={{ maxWidth: '400px', display: 'flex', alignItems: 'center', flexDirection: 'column', margin: '16px auto' }}>
+                <FormControl className="login-form__control" fullWidth style={{
+                    marginBottom: '20px'
+                }}>
                     <InputLabel id="country">Страна</InputLabel>
                     <Select
                         id="country"
@@ -81,7 +87,7 @@ const Login = ({ user }: {
                             ))}
                     </Select>
                 </FormControl>
-                <FormControl fullWidth>
+                <FormControl className="login-form__control" fullWidth>
                     <InputLabel id="city">Город</InputLabel>
                     <Select
                         id="city"
@@ -100,8 +106,14 @@ const Login = ({ user }: {
                             })}
                     </Select>
                 </FormControl>
-                <Button variant="outlined" color="secondary" type="submit">Стать помощником</Button>
-
+                {webApp ? <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>:
+                 <Button variant="outlined" color="secondary" type="submit" fullWidth
+                    style={{
+                        background: 'var(--tg-theme-button-color)',
+                        color: 'var(--tg-theme-button-text-color)',
+                        marginTop: '20px',
+                        border: 'none'
+                    }}>Стать помощником</Button>}
             </form>
         </TelegramProvider>
     );

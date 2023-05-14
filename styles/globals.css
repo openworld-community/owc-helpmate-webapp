@@ -22,9 +22,12 @@ a {
 }
 
 :root {
-  --main-font-family: 'Roboto', sans-serif;
+  --main-font-family: 'Open sans', 'Roboto', sans-serif;
   --main-font-color: #ffffff;
   --main-font-size: 16px;
+    --tg-theme-bg-color: #FCFCFC;
+    --tg-theme-button-color: #34B547;
+    --tg-theme-button-text-color: #FCFCFC;
 }
 
 html {
@@ -32,6 +35,10 @@ html {
 }
 
 body {
-  background: white;
+  background: var(--tg-theme-bg-color);
   color: #ffffff;
+}
+
+button {
+  background: var(--tg-theme-button-color);
 }

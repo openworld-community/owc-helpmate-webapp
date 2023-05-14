@@ -17,7 +17,7 @@ const Login = ({ user }: {
     const [city, setCity] = useState("")
 
     const { webApp } = useTelegram();
-console.log(webApp);
+    console.log(webApp);
     const handleSubmit = () => {
         // TODO
     }
@@ -106,14 +106,16 @@ console.log(webApp);
                             })}
                     </Select>
                 </FormControl>
-                {webApp ? <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>:
-                 <Button variant="outlined" color="secondary" type="submit" fullWidth
-                    style={{
-                        background: 'var(--tg-theme-button-color)',
-                        color: 'var(--tg-theme-button-text-color)',
-                        marginTop: '20px',
-                        border: 'none'
-                    }}>Стать помощником</Button>}
+                {
+                    webApp ? <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton> :
+                        <Button variant="outlined" color="secondary" type="submit" fullWidth
+                            style={{
+                                background: 'var(--tg-theme-button-color)',
+                                color: 'var(--tg-theme-button-text-color)',
+                                marginTop: '20px',
+                                border: 'none'
+                            }}>Стать помощником</Button>
+                }
             </form>
         </TelegramProvider>
     );

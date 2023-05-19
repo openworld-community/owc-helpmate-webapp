@@ -6,14 +6,10 @@ const WebApp = () => {
   const { user, webApp } = useTelegram();
   const { push } = useRouter();
   useEffect(() => {
-    console.log(user, webApp);
-
-    push(`/profile?user=${user?.id}`)
+    push(`/profile?user=${user?.id}`);
   }, []);
 
-  return (
-    <div></div>
-  );
+  return <div></div>;
 };
 
 const WithTelegramProvider = () => {

@@ -24,7 +24,6 @@ export const TelegramProvider = ({ children }: { children: ReactNode }) => {
     return webApp
       ? {
           webApp,
-          unsafeData: webApp.initDataUnsafe,
           user: webApp.initDataUnsafe.user,
         }
       : {};

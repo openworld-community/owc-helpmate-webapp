@@ -37,6 +37,8 @@ export interface IWebApp {
   };
   MainButton: MainButton;
   HapticFeedback: any;
+  close(): void;
+  ready(): void;
 }
 
 interface MainButton {

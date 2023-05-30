@@ -10,7 +10,7 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
   if (!user) {
     return {
       redirect: {
-        destination: '/login',
+        destination: `/role?user=${telegramUserId}`,
         query: {
           user: telegramUserId,
         },

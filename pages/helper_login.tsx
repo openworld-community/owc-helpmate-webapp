@@ -1,7 +1,7 @@
 import { useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from 'react';
-import { InputLabel, MenuItem, FormControl, Select, Button } from '@mui/material';
-import { supabase } from '../lib/initSupabase';
+import { InputLabel, MenuItem, FormControl, Select, Button, TextField } from '@mui/material';
+//import { supabase } from '../lib/initSupabase';
 import { MainButton } from '../components/MainButton';
 
 const selectStyle = {
@@ -48,20 +48,20 @@ const Login = () => {
 
   const fetchCities = async (country: string) => {
     const countryId = countries?.find((c) => c.name === country)?.id;
-    const { data: regionIds } = await supabase.from('region').select('id').eq('country_id', countryId);
+    const { data: regionIds } = { data: [0, 1] }//await supabase.from('region').select('id').eq('country_id', countryId);
     const cities:
       | {
-          [x: string]: any;
-        }[]
+        [x: string]: any;
+      }[]
       | null = [];
 
     if (regionIds) {
       for (const region of regionIds) {
-        const { data: regionCities } = await supabase
+        const { data: regionCities } = { data: [{ name: 'Tbilisi', id: 0 }, { name: 'Batumi', id: 1 }] }/*await supabase
           .from('city')
           .select('*')
           .eq('region_id', region.id)
-          .order('name', { ascending: true });
+          .order('name', { ascending: true });*/
         if (regionCities) cities?.push(...regionCities);
       }
     }
@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   const fetchCountries = async () => {
-    const { data: countries } = await supabase.from('country').select('*').order('name', { ascending: true });
+    const { data: countries } = { data: [{ name: 'Georgia', id: 0 }, { name: 'Russia', id: 1 }] }//await supabase.from('country').select('*').order('name', { ascending: true });
 
     if (countries) {
       setCountries(countries);
@@ -100,10 +100,7 @@ const Login = () => {
           marginBottom: '20px',
         }}
       >
-        <InputLabel id="country" sx={labelStyle}>
-          Страна
-        </InputLabel>
-        <Select
+        <TextField
           id="country"
           label="Страна"
           variant="standard"
@@ -112,10 +109,13 @@ const Login = () => {
             fetchCities(e.target.value);
             setCountry(e.target.value);
           }}
-          MenuProps={{
-            style: { top: '16px', left: '-18px', maxHeight: 'calc(100% - 34px)' },
+          select
+          SelectProps={{
+            MenuProps: {
+              style: { maxHeight: 'calc(100% - 34px)' },
+              sx: selectStyle
+            }
           }}
-          sx={selectStyle}
           fullWidth
         >
           {countries &&
@@ -124,7 +124,7 @@ const Login = () => {
                 {item.name}
               </MenuItem>
             ))}
-        </Select>
+        </TextField>
       </FormControl>
       {country ? (
         <FormControl
@@ -134,20 +134,20 @@ const Login = () => {
             marginBottom: '20px',
           }}
         >
-          <InputLabel id="city" sx={labelStyle}>
-            Город
-          </InputLabel>
-          <Select
+          <TextField
             id="city"
             label="Город"
             variant="standard"
             value={city}
             onChange={(e) => setCity(e.target.value)}
             fullWidth
-            MenuProps={{
-              style: { top: '16px', left: '-18px', maxHeight: 'calc(100% - 102px)' },
+            select
+            SelectProps={{
+              MenuProps: {
+                style: { maxHeight: 'calc(100% - 102px)' },
+                sx: selectStyle
+              }
             }}
-            sx={selectStyle}
           >
             {cities &&
               cities.map((item) => {
@@ -157,7 +157,7 @@ const Login = () => {
                   </MenuItem>
                 );
               })}
-          </Select>
+          </TextField>
         </FormControl>
       ) : null}
       {user ? (

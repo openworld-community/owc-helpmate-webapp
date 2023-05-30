@@ -1,7 +1,7 @@
 import { useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from 'react';
 import { InputLabel, MenuItem, FormControl, Select, Button, TextField } from '@mui/material';
-//import { supabase } from '../lib/initSupabase';
+import { supabase } from '../lib/initSupabase';
 import { MainButton } from '../components/MainButton';
 
 const selectStyle = {
@@ -48,7 +48,7 @@ const Login = () => {
 
   const fetchCities = async (country: string) => {
     const countryId = countries?.find((c) => c.name === country)?.id;
-    const { data: regionIds } = { data: [0, 1] }//await supabase.from('region').select('id').eq('country_id', countryId);
+    const { data: regionIds } = await supabase.from('region').select('id').eq('country_id', countryId);
     const cities:
       | {
         [x: string]: any;
@@ -57,11 +57,11 @@ const Login = () => {
 
     if (regionIds) {
       for (const region of regionIds) {
-        const { data: regionCities } = { data: [{ name: 'Tbilisi', id: 0 }, { name: 'Batumi', id: 1 }] }/*await supabase
+        const { data: regionCities } = await supabase
           .from('city')
           .select('*')
           .eq('region_id', region.id)
-          .order('name', { ascending: true });*/
+          .order('name', { ascending: true });
         if (regionCities) cities?.push(...regionCities);
       }
     }
@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   const fetchCountries = async () => {
-    const { data: countries } = { data: [{ name: 'Georgia', id: 0 }, { name: 'Russia', id: 1 }] }//await supabase.from('country').select('*').order('name', { ascending: true });
+    const { data: countries } = await supabase.from('country').select('*').order('name', { ascending: true });
 
     if (countries) {
       setCountries(countries);

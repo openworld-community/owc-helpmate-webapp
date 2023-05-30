@@ -1,5 +1,4 @@
 import { GetServerSidePropsContext } from 'next';
-import { TelegramProvider } from '../contexts/TelegramProvider';
 
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
   const telegramUserId = context.query.user;

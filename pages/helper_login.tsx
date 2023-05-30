@@ -1,12 +1,10 @@
 import { useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from 'react';
-import { InputLabel, MenuItem, FormControl, Select, Button, TextField } from '@mui/material';
+import { MenuItem, FormControl, Button, TextField } from '@mui/material';
 import { supabase } from '../lib/initSupabase';
 import { MainButton } from '../components/MainButton';
 
-const selectStyle = {
-  paddingLeft: '10px',
-  paddingRight: '10px',
+const textFieldStyle = {
   color: 'var(--tg-theme-text-color)',
   '&:before': {
     borderColor: 'var(--tg-theme-text-color)',
@@ -37,12 +35,10 @@ const Login = () => {
   const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (webApp) {
-      fetchCountries();
       webApp.ready();
+      fetchCountries();
     }
   }, []);
 
@@ -51,8 +47,8 @@ const Login = () => {
     const { data: regionIds } = await supabase.from('region').select('id').eq('country_id', countryId);
     const cities:
       | {
-        [x: string]: any;
-      }[]
+          [x: string]: any;
+        }[]
       | null = [];
 
     if (regionIds) {
@@ -76,7 +72,6 @@ const Login = () => {
 
     if (countries) {
       setCountries(countries);
-      setLoading(false);
     }
   };
 
@@ -94,13 +89,15 @@ const Login = () => {
       }}
     >
       <FormControl
-        className="login-form__control"
         fullWidth
         style={{
           marginBottom: '20px',
+          paddingLeft: '10px',
+          paddingRight: '10px',
         }}
       >
         <TextField
+          select
           id="country"
           label="Страна"
           variant="standard"
@@ -109,14 +106,13 @@ const Login = () => {
             fetchCities(e.target.value);
             setCountry(e.target.value);
           }}
-          select
+          InputLabelProps={{ sx: labelStyle }}
           SelectProps={{
+            sx: textFieldStyle,
             MenuProps: {
-              style: { maxHeight: 'calc(100% - 34px)' },
-              sx: selectStyle
-            }
+              style: { top: '16px', maxHeight: 'calc(100% - 34px)' },
+            },
           }}
-          fullWidth
         >
           {countries &&
             countries.map((item) => (
@@ -128,25 +124,25 @@ const Login = () => {
       </FormControl>
       {country ? (
         <FormControl
-          className="login-form__control"
           fullWidth
           style={{
             marginBottom: '20px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
           }}
         >
           <TextField
+            select
             id="city"
             label="Город"
             variant="standard"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            fullWidth
-            select
             SelectProps={{
+              sx: textFieldStyle,
               MenuProps: {
-                style: { maxHeight: 'calc(100% - 102px)' },
-                sx: selectStyle
-              }
+                style: { top: '16px', maxHeight: 'calc(100% - 102px)' },
+              },
             }}
           >
             {cities &&

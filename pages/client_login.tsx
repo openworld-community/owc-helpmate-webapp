@@ -43,23 +43,11 @@ const Login = () => {
 
   const fetchCities = async (country: string) => {
     const countryId = countries?.find((c) => c.name === country)?.id;
-    const { data: regionIds } = await supabase.from('region').select('id').eq('country_id', countryId);
-    const cities:
-      | {
-          [x: string]: any;
-        }[]
-      | null = [];
-
-    if (regionIds) {
-      for (const region of regionIds) {
-        const { data: regionCities } = await supabase
-          .from('city')
-          .select('*')
-          .eq('region_id', region.id)
-          .order('name', { ascending: true });
-        if (regionCities) cities?.push(...regionCities);
-      }
-    }
+    const { data: cities } = await supabase
+      .from('cities')
+      .select('*')
+      .eq('country', countryId)
+      .order('name', { ascending: true });
 
     if (cities) {
       setCities(cities);
@@ -67,7 +55,7 @@ const Login = () => {
   };
 
   const fetchCountries = async () => {
-    const { data: countries } = await supabase.from('country').select('*').order('name', { ascending: true });
+    const { data: countries } = await supabase.from('countries').select('*').order('name', { ascending: true });
 
     if (countries) {
       setCountries(countries);

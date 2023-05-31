@@ -46,15 +46,20 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
       ]).select().maybeSingle();
       console.log('2', data)
       if (data) {
-        const helper = await supabase.from('helpers').insert([
-          { id: data.id, chat: chat.id }
-        ])
+        profile = data.id
       }
-    } else {
-      await supabase.from('helpers').upsert([
+    }
+
+    console.log(profile)
+    if (helper) {
+      await supabase.from('helpers').update([
         { id: profile, country_id: country, city_id: city }
-      ],
-      { onConflict: 'id, country_id, city_id'})
+      ])
+    } else {
+      const helper = await supabase.from('helpers').insert([
+        { id: profile, chat: chat.id }
+      ])
+      console.log(helper)
     }
     // example
     if (webApp) {

@@ -75,11 +75,10 @@ const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any
   }, []);
 
   const fetchCities = async (country: string) => {
-    const countryId = countries?.find((c) => c.name === country)?.id;
     const { data: cities } = await supabase
       .from('cities')
       .select('*')
-      .eq('country', countryId)
+      .eq('country', country)
       .order('name', { ascending: true });
 
     if (cities) {
@@ -96,7 +95,7 @@ const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any
   };
 
   const fetchChat = async () => {
-    const { data: chats } = await supabase.from('chats').select('*').eq('countryId', country).eq('cityId', city);
+    const { data: chats } = await supabase.from('chats').select('*').eq('country', country).eq('city', city);
 
     if (chats && chats.length) {
       setChat(chats[0])

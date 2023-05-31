@@ -25,11 +25,11 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
   const profile = context.query.profile as any;
 
   return {
-    props: { telegramUserId },
+    props: { telegramUserId, profile },
   };
 };
 
-const Login = ({ telegramUserId }: { telegramUserId: string }) => {
+const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: any }) => {
   const [helper, setHelperProfile] = useState<any>(null);
   const [country, setCountry] = useState(helper?.countryId || '');
   const [city, setCity] = useState(helper?.cityId || '');
@@ -39,7 +39,7 @@ const Login = ({ telegramUserId }: { telegramUserId: string }) => {
   console.log(telegramUserId, helper);
   const handleSubmit = async () => {
     // insert user to table if no profile
-    if (!helper) {
+    if (!profile) {
       const { data, error } = await supabase.from('profiles').insert([
         { ...user, country_id: country, city_id: city }
       ]).select().maybeSingle();

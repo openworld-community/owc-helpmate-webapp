@@ -64,11 +64,12 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
   useEffect(() => {
     if (webApp) {
+      console.log(telegramUserId, profile)
       fetchHelperProfile();
       fetchCountries();
       webApp.ready();
     }
-  }, []);
+  }, [webApp]);
 
   const fetchHelperProfile = async () => {
     const { data: helper, error } = await supabase.from('helpers').select('*').eq('id', profile).maybeSingle();

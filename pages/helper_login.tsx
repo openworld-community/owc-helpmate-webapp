@@ -37,10 +37,11 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
   const { webApp, user } = useTelegram();
 
   console.log(telegramUserId, helper);
-  const handleSubmit = async (event: any) => {
+
+  async function handleSubmit(event: any) {
     event.preventDefault();
     // insert user to table if no profile
-    console.log('1', profile)
+    console.log('1', profile, country, city)
     if (!profile) {
       const { data, error } = await supabase.from('profiles').insert([
         { ...user, country_id: country, city_id: city }

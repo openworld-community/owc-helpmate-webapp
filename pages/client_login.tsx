@@ -63,7 +63,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     useEffect(() => {
         console.log('set callback', webApp, handleSubmit)
-        webApp?.MainButton.onClick(handleSubmit)
+        webApp?.MainButton.onClick(() => {alert('click')})
       }, [webApp]);
 
     const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);

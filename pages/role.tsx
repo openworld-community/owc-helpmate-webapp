@@ -7,7 +7,7 @@ import { GetServerSidePropsContext } from 'next';
 
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
     const telegramUserId = context.query.user;
-    
+
     return {
         props: { telegramUserId },
     };
@@ -18,7 +18,6 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
     const [profile, setProfile] = useState<any>(null)
     const { push } = useRouter();
 
-    
     useEffect(() => {
         if (webApp) {
           fetchProfile();
@@ -29,7 +28,11 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
       
     const fetchProfile = async () => {
         const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
-        if (profile) setProfile(profile);
+        console.log(telegramUserId);
+        if (profile) {
+            console.log(profile);
+            setProfile(profile);
+        }
     }
 
     const onClientClick = () => {

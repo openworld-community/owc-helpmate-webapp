@@ -6,7 +6,7 @@ const WebApp = () => {
   const { user, webApp } = useTelegram();
   const { push } = useRouter();
   useEffect(() => {
-    push(`/profile?user=${user?.id}`);
+    push(`/role?user=${user?.id}`);
   }, []);
 
   return <div></div>;

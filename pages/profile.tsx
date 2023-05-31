@@ -1,31 +1,25 @@
 import { GetServerSidePropsContext } from 'next';
+import { supabase } from '../lib/initSupabase';
 
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
   const telegramUserId = context.query.user;
-  const { user } = {
-    user: undefined,
-  }; // TODO: Fetch user from the database/check if registered
+  const role = context.query.role;
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: `/role?user=${telegramUserId}`,
-        query: {
-          user: telegramUserId,
-        },
-        permanent: false,
-      },
-    };
+  const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
+
+  if (userProfile) {
+
   }
 
   return {
-    props: { user },
+    props: { role },
   };
 };
 
-const Profile = ({ user }: { user: string }) => {
+const Profile = ({ role }: { role: string }) => {
   // Show the user. No loading state is required
-  return <p>Спасибо {user}, что стали помощником!</p>;
+  if (role === 'helper')
+    return <p>Спасибо, что стали помощником!</p>;
 };
 
 export default Profile;

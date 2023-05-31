@@ -1,8 +1,9 @@
 import { useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from 'react';
-import { MenuItem, FormControl, Button, TextField } from '@mui/material';
+import { MenuItem, FormControl, Button, TextField, containerClasses } from '@mui/material';
 import { supabase } from '../lib/initSupabase';
 import { MainButton } from '../components/MainButton';
+import { GetServerSidePropsContext } from 'next';
 
 const textFieldStyle = {
   color: 'var(--tg-theme-text-color)',
@@ -19,13 +20,43 @@ const textFieldStyle = {
 
 const labelStyle = { color: 'var(--tg-theme-text-color)', opacity: '0.6' };
 
-const Login = () => {
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
+export const getServerSideProps = async function (context: GetServerSidePropsContext) {
+  const telegramUserId = context.query.user;
+  const profile = context.query.profile as any;
+  let helper;
+  if (profile) {
+    const { data: helperProfile, error } = await supabase.from('helpers').select('*').eq('id', profile.id).maybeSingle();
+    helper = helperProfile;
+  }
+
+  return {
+    props: { telegramUserId, helper },
+  };
+};
+
+const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any }) => {
+  const [country, setCountry] = useState(helper.countryId);
+  const [city, setCity] = useState(helper.cityId);
+  const [chat, setChat] = useState<any>(null);
 
   const { webApp, user } = useTelegram();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // insert user to table if no profile
+    if (!helper) {
+      const { data, error } = await supabase.from('profiles').insert([
+        { ...user, country_id: country, city_id: city }
+      ]).select().maybeSingle();
+      if (data) {
+        const helper = await supabase.from('helpers').insert([
+          { id: data.id, chat: chat.id }
+        ])
+      }
+    } else {
+      await supabase.from('profiles').upsert([
+        { id: helper.id, country_id: country, city_id: city }
+      ])
+    }
     // example
     if (webApp) {
       webApp.close();
@@ -62,6 +93,14 @@ const Login = () => {
       setCountries(countries);
     }
   };
+
+  const fetchChat = async () => {
+    const { data: chats } = await supabase.from('chats').select('*').eq('countryId', country).eq('cityId', city);
+
+    if (chats && chats.length) {
+      setChat(chats[0])
+    }
+  }
 
   // Show the user. No loading state is required
   return (
@@ -104,7 +143,7 @@ const Login = () => {
         >
           {countries &&
             countries.map((item) => (
-              <MenuItem key={item.id} value={item.name}>
+              <MenuItem key={item.id} value={item.id}>
                 {item.name}
               </MenuItem>
             ))}
@@ -125,7 +164,10 @@ const Login = () => {
             label="Город"
             variant="standard"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => {
+              setCity(e.target.value);
+              fetchChat();
+            }}
             SelectProps={{
               sx: textFieldStyle,
               MenuProps: {
@@ -136,13 +178,16 @@ const Login = () => {
             {cities &&
               cities.map((item) => {
                 return (
-                  <MenuItem key={item.id} value={item.name}>
+                  <MenuItem key={item.id} value={item.id}>
                     {item.name}
                   </MenuItem>
                 );
               })}
           </TextField>
         </FormControl>
+      ) : null}
+      {city ? (
+        <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
       ) : null}
       {user ? (
         <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>

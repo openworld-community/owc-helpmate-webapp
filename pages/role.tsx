@@ -2,17 +2,24 @@ import { useTelegram } from '../contexts/TelegramProvider';
 import React from 'react';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
+import { supabase } from '../lib/initSupabase';
 import { GetServerSidePropsContext } from 'next';
 
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
   const telegramUserId = context.query.user;
 
+  const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
+
+  if (userProfile) {
+    
+
+  }
   return {
-    props: { telegramUserId },
+    props: { telegramUserId, userProfile },
   };
 };
 
-const Role = ({ telegramUserId }: { telegramUserId: string }) => {
+const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userProfile: any }) => {
   const { webApp, user } = useTelegram();
   const { push } = useRouter();
 
@@ -24,6 +31,7 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
         destination: '/client_login',
         query: {
           user: telegramUserId,
+          profile: userProfile
         },
         permanent: false,
       },
@@ -37,6 +45,7 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
         destination: '/helper_login',
         query: {
           user: telegramUserId,
+          profile: userProfile
         },
         permanent: false,
       },

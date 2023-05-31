@@ -40,7 +40,6 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     const { webApp, user } = useTelegram();
 
-
     const handleSubmit = async () => {
 
         console.log(request);
@@ -217,8 +216,8 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
                             shrink: true,
                         }}
                         variant="standard"
-                        defaultValue="Опишите ваш запрос или проблему"
-                        value={request}
+                        placeholder="Опишите ваш запрос или проблему"
+                        defaultValue={request}
                         multiline
                         onChange={(e) => setRequest(e.target.value)}
                     />

@@ -227,7 +227,10 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
                 <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
             ) : null}
             {user ? (
-                <MainButton text="Отправить заявку" onClick={handleSubmit}></MainButton>
+                <MainButton text="Отправить заявку" onClick={() => {
+                    console.log(country, city, request)
+                    handleSubmit();
+                }}></MainButton>
             ) : (
                 <Button
                     variant="outlined"

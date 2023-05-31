@@ -1,14 +1,17 @@
 import { TelegramProvider, useTelegram } from '../contexts/TelegramProvider';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 const WebApp = () => {
   const { user, webApp } = useTelegram();
-  const { push } = useRouter();
+  const router = useRouter();
 
   console.log('tg user', user);
   useEffect(() => {
-    push(`/role?user=${user?.id}`);
+    router.push({
+      pathname: '/role',
+      query: { user: user?.id },
+    });
   }, []);
 
   return <div></div>;

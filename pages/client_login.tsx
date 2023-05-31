@@ -27,6 +27,8 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
     if (profile) {
         const { data: clientProfile, error } = await supabase.from('clients').select('*').eq('id', profile.id).maybeSingle();
         client = clientProfile;
+        console.log(clientProfile, error)
+
     }
 
 
@@ -37,8 +39,8 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
 
 
 const Login = ({ telegramUserId, client }: { telegramUserId: string, client: any }) => {
-    const [country, setCountry] = useState('');
-    const [city, setCity] = useState('');
+    const [country, setCountry] = useState(client?.countryId || '');
+    const [city, setCity] = useState(client?.cityId || '');
     const [request, setRequest] = useState('');
     const [sent, setSent] = useState(false);
     const [chat, setChat] = useState<any>(null);

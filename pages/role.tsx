@@ -10,10 +10,7 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
 
   const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
 
-  if (userProfile) {
-    
-
-  }
+  console.log(userProfile, error);
   return {
     props: { telegramUserId, userProfile },
   };

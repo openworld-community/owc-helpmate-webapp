@@ -73,7 +73,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
     }, []);
 
     const fetchClientProfile = async () => {
-        const { data: client, error } = await supabase.from('clients').select('*').eq('id', profile.id).maybeSingle();
+        const { data: client, error } = await supabase.from('clients').select('*').eq('id', profile).maybeSingle();
         if (client) {
             console.log('client', client)
             setClient(client);

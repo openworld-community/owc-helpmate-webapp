@@ -42,7 +42,7 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
             pathname: '/client_login',
             query: {
                 user: user?.id,
-                profile: profile
+                profile: profile.id
             },
         })
 
@@ -51,7 +51,7 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
                 destination: '/client_login',
                 query: {
                     user: telegramUserId,
-                    profile: profile
+                    profile: profile.id
                 },
                 permanent: false,
             },

@@ -71,7 +71,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
   }, []);
 
   const fetchHelperProfile = async () => {
-    const { data: helper, error } = await supabase.from('helpers').select('*').eq('id', profile.id).maybeSingle();
+    const { data: helper, error } = await supabase.from('helpers').select('*').eq('id', profile).maybeSingle();
     if (helper) {
       console.log('helper', helper);
       setHelperProfile(helper);

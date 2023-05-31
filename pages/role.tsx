@@ -63,14 +63,14 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
 
         push({
             pathname: '/helper_login',
-            query: { user: user?.id, profile: profile },
+            query: { user: user?.id, profile: profile.id },
         })
         return {
             redirect: {
                 destination: '/helper_login',
                 query: {
                     user: telegramUserId,
-                    profile: profile
+                    profile: profile.id
                 },
                 permanent: false,
             },

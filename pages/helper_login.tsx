@@ -63,10 +63,10 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
   useEffect(() => {
+    console.log(telegramUserId, profile)
+    fetchHelperProfile();
+    fetchCountries();
     if (webApp) {
-      console.log(telegramUserId, profile)
-      fetchHelperProfile();
-      fetchCountries();
       webApp.ready();
     }
   }, [webApp]);

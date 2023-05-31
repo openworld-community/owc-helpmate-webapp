@@ -19,8 +19,8 @@ const Role = ({ telegramUserId }: { telegramUserId: string }) => {
     const { push } = useRouter();
 
     useEffect(() => {
+        fetchProfile();
         if (webApp) {
-          fetchProfile();
           webApp.ready();
         }
       }, []);

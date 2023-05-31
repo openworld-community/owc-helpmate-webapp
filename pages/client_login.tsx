@@ -23,21 +23,15 @@ const labelStyle = { color: 'var(--tg-theme-text-color)', opacity: '0.6' };
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
     const telegramUserId = context.query.user;
     const profile = context.query.profile as any;
-    let client;
-    if (profile) {
-        const { data: clientProfile, error } = await supabase.from('clients').select('*').eq('id', profile.id).maybeSingle();
-        client = clientProfile;
-        console.log(clientProfile, error)
-    }
-
 
     return {
-        props: { telegramUserId, client },
+        props: { telegramUserId },
     };
 };
 
 
-const Login = ({ telegramUserId, client }: { telegramUserId: string, client: any }) => {
+const Login = ({ telegramUserId }: { telegramUserId: string }) => {
+    const [client, setClient] = useState<any>(null);
     const [country, setCountry] = useState(client?.countryId || '');
     const [city, setCity] = useState(client?.cityId || '');
     const [request, setRequest] = useState('');
@@ -72,10 +66,20 @@ const Login = ({ telegramUserId, client }: { telegramUserId: string, client: any
 
     useEffect(() => {
         if (webApp) {
-            webApp.ready();
+            fetchClientProfile();
             fetchCountries();
+            webApp.ready();
         }
     }, []);
+
+    const fetchClientProfile = async () => {
+        const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
+        if (profile) {
+            setClient(profile);
+            setCountry(profile.country_id);
+            setCity(profile.city_id);
+        }
+    }
 
     const fetchCities = async (country: string) => {
         const { data: cities } = await supabase

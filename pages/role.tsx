@@ -24,7 +24,10 @@ const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userPro
     const onClientClick = () => {
         push({
             pathname: '/client_login',
-            query: { user: user?.id },
+            query: {
+                user: user?.id,
+                profile: userProfile
+            },
         })
 
         return {
@@ -42,7 +45,7 @@ const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userPro
     const onHelperClick = () => {
         push({
             pathname: '/helper_login',
-            query: { user: user?.id },
+            query: { user: user?.id, profile: userProfile },
         })
         return {
             redirect: {

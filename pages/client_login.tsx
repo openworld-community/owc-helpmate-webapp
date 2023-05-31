@@ -42,7 +42,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     const handleSubmit = async () => {
 
-        console.log(request);
+        console.log(request, country, city);
         // insert user to table if no profile
         if (!profile) {
             const { data, error } = await supabase.from('profiles').insert([

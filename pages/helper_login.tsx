@@ -38,8 +38,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
   console.log(telegramUserId, helper);
 
-  async function handleSubmit(event: any) {
-    event.preventDefault();
+  async function handleSubmit() {
     // insert user to table if no profile
     console.log('1', profile, country, city)
     if (!profile) {

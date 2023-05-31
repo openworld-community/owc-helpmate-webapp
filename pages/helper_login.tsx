@@ -71,12 +71,12 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
   }, []);
 
   const fetchHelperProfile = async () => {
-    const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
-    if (profile) {
-      console.log(profile);
-      setHelperProfile(profile);
-      setCountry(profile.country_id);
-      setCity(profile.city_id);
+    const { data: helper, error } = await supabase.from('helpers').select('*').eq('id', profile.id).maybeSingle();
+    if (helper) {
+      console.log('helper', helper);
+      setHelperProfile(helper);
+      setCountry(helper.country_id);
+      setCity(helper.city_id);
     }
   }
 

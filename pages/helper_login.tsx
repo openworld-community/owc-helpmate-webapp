@@ -23,7 +23,6 @@ const labelStyle = { color: 'var(--tg-theme-text-color)', opacity: '0.6' };
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
   const telegramUserId = context.query.user;
   const profile = context.query.profile as any;
-  
 
   return {
     props: { telegramUserId },
@@ -50,7 +49,7 @@ const Login = ({ telegramUserId }: { telegramUserId: string }) => {
         ])
       }
     } else {
-      await supabase.from('profiles').upsert([
+      await supabase.from('helpers').upsert([
         { id: helper.id, country_id: country, city_id: city }
       ])
     }

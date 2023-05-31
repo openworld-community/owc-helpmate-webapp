@@ -53,7 +53,7 @@ const Login = ({ telegramUserId }: { telegramUserId: string }) => {
                 ])
             }
         } else {
-            await supabase.from('profiles').upsert([
+            await supabase.from('clients').upsert([
                 { id: client.id, country_id: country, city_id: city }
             ])
         }

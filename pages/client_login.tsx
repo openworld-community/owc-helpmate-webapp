@@ -63,6 +63,12 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             ])
             console.log(client)
         }
+
+        // create task
+        const task = await supabase.from('tasks').insert([
+            {chat: chat?.id, description: request, profile: profile }
+        ])
+        console.log(task);
         // example
         setSent(true);
     };

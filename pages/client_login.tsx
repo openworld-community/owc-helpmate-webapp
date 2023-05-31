@@ -61,6 +61,10 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         setSent(true);
     };
 
+    useEffect(() => {
+        webApp?.MainButton.onClick(handleSubmit)
+      }, [webApp]);
+
     const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
     const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 

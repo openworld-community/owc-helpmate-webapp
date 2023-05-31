@@ -208,7 +208,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
       ) : null}
       {user ? (
-        <MainButton text="Стать помощником" onClick={() => handleSubmit()}></MainButton>
+        <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>
       ) : (
         <Button
           variant="outlined"
@@ -221,6 +221,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             marginTop: '20px',
             border: 'none',
           }}
+          onClick={handleSubmit}
         >
           Стать помощником
         </Button>

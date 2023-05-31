@@ -39,10 +39,12 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
   console.log(telegramUserId, helper);
   const handleSubmit = async () => {
     // insert user to table if no profile
+    console.log('1', profile)
     if (!profile) {
       const { data, error } = await supabase.from('profiles').insert([
         { ...user, country_id: country, city_id: city }
       ]).select().maybeSingle();
+      console.log('2', data)
       if (data) {
         const helper = await supabase.from('helpers').insert([
           { id: data.id, chat: chat.id }
@@ -50,7 +52,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
       }
     } else {
       await supabase.from('helpers').upsert([
-        { id: helper.id, country_id: country, city_id: city }
+        { id: profile, country_id: country, city_id: city }
       ])
     }
     // example

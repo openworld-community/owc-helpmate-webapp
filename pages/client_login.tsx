@@ -42,6 +42,8 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
 
     const handleSubmit = async () => {
+
+        console.log(request);
         // insert user to table if no profile
         if (!profile) {
             const { data, error } = await supabase.from('profiles').insert([
@@ -50,18 +52,6 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             if (data) {
                 profile = data.id
             }
-        }
-
-        console.log(profile)
-        if (client) {
-            await supabase.from('clients').update([
-                { id: profile, country_id: country, city_id: city }
-            ])
-        } else {
-            const client = await supabase.from('clients').insert([
-                { id: profile, chat: chat?.id }
-            ])
-            console.log(client)
         }
 
         // create task

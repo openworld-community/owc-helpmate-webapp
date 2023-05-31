@@ -131,6 +131,7 @@ const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any
           variant="standard"
           value={country}
           onChange={(e) => {
+            console.log(e);
             fetchCities(e.target.value);
             setCountry(e.target.value);
           }}

@@ -38,7 +38,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
   console.log(telegramUserId, helper);
 
-  async function handleSubmit() {
+  const handleSubmit = async () => {
     // insert user to table if no profile
     console.log('1', profile, country, city)
     if (!profile) {
@@ -208,7 +208,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
       ) : null}
       {user ? (
-        <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>
+        <MainButton text="Стать помощником" onClick={() => handleSubmit()}></MainButton>
       ) : (
         <Button
           variant="outlined"

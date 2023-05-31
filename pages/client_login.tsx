@@ -56,7 +56,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
         // create task
         const task = await supabase.from('tasks').insert([
-            {chat: chat?.id, description: request, profile: profile }
+            { chat: chat?.id, description: request, profile: profile }
         ])
         console.log(task);
         // example
@@ -68,22 +68,11 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     useEffect(() => {
         console.log(telegramUserId, profile)
-        fetchClientProfile();
         fetchCountries();
         if (webApp) {
             webApp.ready();
         }
     }, [webApp]);
-
-    const fetchClientProfile = async () => {
-        const { data: client, error } = await supabase.from('clients').select('*').eq('id', profile).maybeSingle();
-        if (client) {
-            console.log('client', client)
-            setClient(client);
-            setCountry(client.country_id);
-            setCity(client.city_id);
-        }
-    }
 
     const fetchCities = async (country: string) => {
         const { data: cities } = await supabase

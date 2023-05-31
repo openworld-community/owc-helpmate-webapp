@@ -40,7 +40,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     const { webApp, user } = useTelegram();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log(request, country, city);
         // insert user to table if no profile
         if (!profile) {
@@ -63,7 +63,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     useEffect(() => {
         console.log('set callback', webApp, handleSubmit)
-        webApp?.MainButton.onClick(() => {alert('click')})
+        webApp?.MainButton.onClick(() => {handleSubmit()})
       }, [webApp]);
 
     const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);

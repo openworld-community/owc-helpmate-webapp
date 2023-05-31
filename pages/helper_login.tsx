@@ -187,7 +187,7 @@ const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any
           </TextField>
         </FormControl>
       ) : null}
-      {city ? (
+      {city && chat ? (
         <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
       ) : null}
       {user ? (

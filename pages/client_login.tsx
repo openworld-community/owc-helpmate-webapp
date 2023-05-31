@@ -228,6 +228,9 @@ const Login = ({ telegramUserId, client }: { telegramUserId: string, client: any
                     />
                 </FormControl>
             ) : null}
+            {city && chat ? (
+                <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
+            ) : null}
             {user ? (
                 <MainButton text="Отправить заявку" onClick={handleSubmit}></MainButton>
             ) : (

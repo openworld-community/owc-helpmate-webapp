@@ -8,10 +8,13 @@ const WebApp = () => {
 
   console.log('tg user', user);
   useEffect(() => {
-    router.push({
-      pathname: '/role',
-      query: { user: user?.id },
-    });
+    console.log(user?.id);
+    if (user?.id) {
+      router.push({
+        pathname: '/role',
+        query: { user: user?.id },
+      });
+    }
   }, []);
 
   return <div></div>;

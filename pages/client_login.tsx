@@ -59,7 +59,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             ])
         } else {
             const client = await supabase.from('clients').insert([
-                { id: profile, chat: chat.id }
+                { id: profile, chat: chat?.id }
             ])
             console.log(client)
         }

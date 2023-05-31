@@ -17,11 +17,12 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
 };
 
 const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userProfile: any }) => {
-    console.log(telegramUserId, userProfile);
     const { webApp, user } = useTelegram();
     const { push } = useRouter();
 
     const onClientClick = () => {
+        console.log(telegramUserId, userProfile);
+
         push({
             pathname: '/client_login',
             query: {
@@ -43,6 +44,8 @@ const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userPro
     };
 
     const onHelperClick = () => {
+        console.log(telegramUserId, userProfile);
+
         push({
             pathname: '/helper_login',
             query: { user: user?.id, profile: userProfile },

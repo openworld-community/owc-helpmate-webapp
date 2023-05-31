@@ -174,7 +174,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
                 >
                     {countries &&
                         countries.map((item) => (
-                            <MenuItem key={item.id} value={item.name}>
+                            <MenuItem key={item.id} value={item.id}>
                                 {item.name}
                             </MenuItem>
                         ))}

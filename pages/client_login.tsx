@@ -28,7 +28,6 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
         const { data: clientProfile, error } = await supabase.from('clients').select('*').eq('id', profile.id).maybeSingle();
         client = clientProfile;
         console.log(clientProfile, error)
-
     }
 
 

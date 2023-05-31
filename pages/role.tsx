@@ -1,5 +1,5 @@
 import { useTelegram } from '../contexts/TelegramProvider';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/initSupabase';
@@ -7,27 +7,39 @@ import { GetServerSidePropsContext } from 'next';
 
 export const getServerSideProps = async function (context: GetServerSidePropsContext) {
     const telegramUserId = context.query.user;
-
-    const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
-
-    console.log(telegramUserId, userProfile, error);
+    
     return {
-        props: { telegramUserId, userProfile },
+        props: { telegramUserId },
     };
 };
 
-const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userProfile: any }) => {
+const Role = ({ telegramUserId }: { telegramUserId: string }) => {
     const { webApp, user } = useTelegram();
+    const [profile, setProfile] = useState<any>(null)
     const { push } = useRouter();
 
+    
+    useEffect(() => {
+        if (webApp) {
+          fetchProfile();
+          webApp.ready();
+        }
+      }, []);
+
+      
+    const fetchProfile = async () => {
+        const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
+        if (profile) setProfile(profile);
+    }
+
     const onClientClick = () => {
-        console.log(telegramUserId, userProfile);
+        console.log(telegramUserId, profile);
 
         push({
             pathname: '/client_login',
             query: {
                 user: user?.id,
-                profile: userProfile
+                profile: profile
             },
         })
 
@@ -36,7 +48,7 @@ const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userPro
                 destination: '/client_login',
                 query: {
                     user: telegramUserId,
-                    profile: userProfile
+                    profile: profile
                 },
                 permanent: false,
             },
@@ -44,18 +56,18 @@ const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userPro
     };
 
     const onHelperClick = () => {
-        console.log(telegramUserId, userProfile);
+        console.log(telegramUserId, profile);
 
         push({
             pathname: '/helper_login',
-            query: { user: user?.id, profile: userProfile },
+            query: { user: user?.id, profile: profile },
         })
         return {
             redirect: {
                 destination: '/helper_login',
                 query: {
                     user: telegramUserId,
-                    profile: userProfile
+                    profile: profile
                 },
                 permanent: false,
             },

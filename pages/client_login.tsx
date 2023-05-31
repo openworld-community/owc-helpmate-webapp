@@ -55,7 +55,8 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         } else {
             await supabase.from('clients').upsert([
                 { id: client.id, country_id: country, city_id: city }
-            ])
+            ],
+            { onConflict: 'id, country_id, city_id'}))
         }
         // example
         setSent(true);

@@ -117,6 +117,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         );
     }
 
+    console.log(request)
     // Show the user. No loading state is required
     return (
         <form

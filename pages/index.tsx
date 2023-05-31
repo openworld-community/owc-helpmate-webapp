@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 const WebApp = () => {
   const { user, webApp } = useTelegram();
   const { push } = useRouter();
+
+  console.log('tg user', user);
   useEffect(() => {
     push(`/role?user=${user?.id}`);
   }, []);

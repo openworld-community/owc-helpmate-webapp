@@ -62,6 +62,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
     };
 
     useEffect(() => {
+        console.log('set callback', webApp, handleSubmit)
         webApp?.MainButton.onClick(handleSubmit)
       }, [webApp]);
 

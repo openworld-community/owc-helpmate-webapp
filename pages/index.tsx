@@ -15,7 +15,7 @@ const WebApp = () => {
         query: { user: user?.id },
       });
     }
-  }, []);
+  }, [user]);
 
   return <div></div>;
 };

@@ -42,6 +42,7 @@ const Login = ({ telegramUserId, helper }: { telegramUserId: string, helper: any
 
   const { webApp, user } = useTelegram();
 
+  console.log(telegramUserId, helper);
   const handleSubmit = async () => {
     // insert user to table if no profile
     if (!helper) {

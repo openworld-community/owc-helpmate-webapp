@@ -10,13 +10,14 @@ export const getServerSideProps = async function (context: GetServerSidePropsCon
 
   const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
 
-  console.log(userProfile, error);
+  console.log(telegramUserId, userProfile, error);
   return {
     props: { telegramUserId, userProfile },
   };
 };
 
 const Role = ({ telegramUserId, userProfile }: { telegramUserId: string, userProfile: any }) => {
+    console.log(telegramUserId, userProfile);
   const { webApp, user } = useTelegram();
   const { push } = useRouter();
 

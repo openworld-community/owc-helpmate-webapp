@@ -10,7 +10,8 @@ const Profile = () => {
 
   const handleClick = async () => {
     await supabase.from('helpers').delete().eq('id', user?.id).select();
-
+    await supabase.from('profile').update({role: 'user'}).eq('id', user?.id);
+    
     push({
       pathname: '/',
     });

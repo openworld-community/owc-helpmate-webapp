@@ -40,7 +40,7 @@ const Login = () => {
   const handleSubmit = async () => {
     console.log(country, city);
 
-    await supabase.from('profiles').update({ id: Number(query.profile), city, country }).eq('id', Number(query.profile));
+    await supabase.from('profiles').update({ id: Number(query.profile), city, country, role: 'helper' }).eq('id', Number(query.profile));
     await supabase.from('helpers').insert({ id: Number(query.profile), chat: chat?.id });
 
     push({

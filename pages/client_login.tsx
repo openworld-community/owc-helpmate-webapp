@@ -61,7 +61,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
         // create task
         const task = await supabase.from('tasks').insert([
-            { chat: chat?.id, description: request, profile: profile }
+            { chat: chat?.id, description: request, profile: profile, city, country }
         ])
         console.log(task);
         // example
@@ -127,8 +127,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             </div>
         );
     }
-
-    console.log(request)
+    
     // Show the user. No loading state is required
     return (
         <form

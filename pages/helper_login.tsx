@@ -24,7 +24,6 @@ const Login = () => {
   const { webApp, user } = useTelegram();
   const { push, query } = useRouter();
 
-  const [helper, setHelperProfile] = useState<any>(null);
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [chat, setChat] = useState<any>(null);
@@ -32,11 +31,8 @@ const Login = () => {
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
   const handleSubmit = async () => {
-    if (helper) {
-      await supabase.from('helpers').update({ id: user?.id, chat: chat?.id }).eq('id', user?.id);
-    } else {
-      await supabase.from('helpers').insert({ id: user?.id, chat: chat?.id });
-    }
+    await supabase.from('profiles').update({ id: query.profile, city, country }).eq('id', query.profile);
+    await supabase.from('helpers').insert({ id: query.profile, chat: chat?.id });
 
     push({
       pathname: '/profile',
@@ -91,7 +87,7 @@ const Login = () => {
 
   useEffect(() => {
     fetchHelperProfile().then((data) => {
-      if (data) {
+      if (data && data.length) {
         push({
           pathname: '/profile',
           query: {

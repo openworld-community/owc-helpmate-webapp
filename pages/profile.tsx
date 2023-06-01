@@ -9,7 +9,7 @@ const Profile = () => {
   const { push } = useRouter();
 
   const handleClick = async () => {
-    await supabase.from('helpers').delete().eq('id', user?.id);
+    await supabase.from('helpers').delete().eq('id', user?.id).select();
 
     push({
       pathname: '/',

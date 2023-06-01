@@ -30,9 +30,15 @@ const Login = () => {
   const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
+  useEffect(() => {
+    webApp?.MainButton.onClick(handleSubmit)
+  }, [country, city, chat])
+
   const handleSubmit = async () => {
-    await supabase.from('profiles').update({ id: query.profile, city, country }).eq('id', query.profile);
-    await supabase.from('helpers').insert({ id: query.profile, chat: chat?.id });
+    console.log(country, city);
+
+    await supabase.from('profiles').update({ id: Number(query.profile), city, country }).eq('id', Number(query.profile));
+    await supabase.from('helpers').insert({ id: Number(query.profile), chat: chat?.id });
 
     push({
       pathname: '/profile',
@@ -197,7 +203,7 @@ const Login = () => {
       ) : null}
       {city && chat ? <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p> : null}
       {user ? (
-        <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>
+        <MainButton text="Стать помощником" onClick={() => handleSubmit(city, country, chat)}></MainButton>
       ) : (
         <Button
           variant="outlined"
@@ -210,7 +216,7 @@ const Login = () => {
             marginTop: '20px',
             border: 'none',
           }}
-          onClick={handleSubmit}
+          onClick={() => handleSubmit(city, country, chat)}
         >
           Стать помощником
         </Button>

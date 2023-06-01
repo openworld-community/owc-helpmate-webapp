@@ -40,6 +40,10 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     const { webApp, user } = useTelegram();
 
+    useEffect(() => {
+        webApp?.MainButton.onClick(handleSubmit)
+      }, [country, city, chat, request])
+
     const handleSubmit = async () => {
         console.log(request, country, city);
         // insert user to table if no profile

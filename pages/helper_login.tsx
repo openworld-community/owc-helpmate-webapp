@@ -1,9 +1,9 @@
 import { useTelegram } from '../contexts/TelegramProvider';
 import React, { useState, useEffect } from 'react';
-import { MenuItem, FormControl, Button, TextField, containerClasses } from '@mui/material';
+import { MenuItem, FormControl, Button, TextField } from '@mui/material';
 import { supabase } from '../lib/initSupabase';
 import { MainButton } from '../components/MainButton';
-import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 
 const textFieldStyle = {
   color: 'var(--tg-theme-text-color)',
@@ -20,80 +20,49 @@ const textFieldStyle = {
 
 const labelStyle = { color: 'var(--tg-theme-text-color)', opacity: '0.6' };
 
-export const getServerSideProps = async function (context: GetServerSidePropsContext) {
-  const telegramUserId = context.query.user;
-  const profile = context.query.profile as any;
-
-  return {
-    props: { telegramUserId, profile },
-  };
-};
-
-const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: any }) => {
-  const [helper, setHelperProfile] = useState<any>(null);
-  const [country, setCountry] = useState(helper?.countryId || '');
-  const [city, setCity] = useState(helper?.cityId || '');
-  const [chat, setChat] = useState<any>(null);
+const Login = () => {
   const { webApp, user } = useTelegram();
+  const { push, query } = useRouter();
 
-  console.log(telegramUserId, helper);
-
-  const handleSubmit = async () => {
-    // insert user to table if no profile
-    console.log('1', profile, country, city)
-    if (!profile) {
-      const { data, error } = await supabase.from('profiles').insert([
-        { ...user, country_id: country, city_id: city }
-      ]).select().maybeSingle();
-      console.log('2', data)
-      if (data) {
-        profile = data.id
-      }
-    }
-
-    console.log(profile)
-    if (helper) {
-      await supabase.from('helpers').update([
-        { id: profile, country_id: country, city_id: city }
-      ])
-    } else {
-      const helper = await supabase.from('helpers').insert([
-        { id: profile, chat: chat?.id }
-      ])
-      console.log(helper)
-    }
-    // example
-    if (webApp) {
-      webApp.close();
-    }
-  };
-
-  useEffect(() => {
-    webApp?.MainButton.onClick(handleSubmit)
-  }, [webApp]);
-
-
+  const [helper, setHelperProfile] = useState<any>(null);
+  const [country, setCountry] = useState();
+  const [city, setCity] = useState();
+  const [chat, setChat] = useState<any>(null);
   const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
-  useEffect(() => {
-    console.log(telegramUserId, profile)
-    fetchHelperProfile();
-    fetchCountries();
-    if (webApp) {
-      webApp.ready();
+  const handleSubmit = async () => {
+    if (helper) {
+      await supabase
+        .from('helpers')
+        .update({ id: query.profile, chat: chat?.id || 1234 })
+        .eq('id', query.profile);
+    } else {
+      await supabase.from('helpers').insert({ id: query.profile, chat: chat?.id || 1234 });
     }
-  }, [webApp]);
+
+    push({
+      pathname: '/profile',
+      query: {
+        helper: query.profile,
+      },
+    });
+
+    return {
+      redirect: {
+        destination: '/profile',
+        query: {
+          helper: query.profile,
+        },
+        permanent: false,
+      },
+    };
+  };
 
   const fetchHelperProfile = async () => {
-    const { data: helper, error } = await supabase.from('helpers').select('*').eq('id', profile).maybeSingle();
-    if (helper) {
-      console.log('helper', helper);
-      setHelperProfile(helper);
-      setCountry(helper.country_id);
-      setCity(helper.city_id);
-    }
-  }
+    const { data } = await supabase.from('helpers').select('*').eq('id', query.profile);
+    return data;
+  };
 
   const fetchCities = async (country: string) => {
     const { data: cities } = await supabase
@@ -119,15 +88,40 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
     const { data: chats } = await supabase.from('chats').select('*').eq('country', country).eq('city', city);
 
     if (chats && chats.length) {
-      setChat(chats[0])
+      setChat(chats[0]);
     }
-  }
+  };
+
+  useEffect(() => {
+    fetchHelperProfile().then((data) => {
+      if (data) {
+        push({
+          pathname: '/profile',
+          query: {
+            helper: data[0].id,
+          },
+        });
+
+        return {
+          redirect: {
+            destination: '/profile',
+            query: {
+              helper: data[0].id,
+            },
+            permanent: false,
+          },
+        };
+      }
+    });
+    fetchCountries();
+    if (webApp) {
+      webApp.ready();
+    }
+  }, []);
 
   // Show the user. No loading state is required
   return (
-    <form
-      autoComplete="off"
-      onSubmit={handleSubmit}
+    <div
       style={{
         maxWidth: '400px',
         display: 'flex',
@@ -151,7 +145,6 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
           variant="standard"
           value={country}
           onChange={(e) => {
-            console.log(e);
             fetchCities(e.target.value);
             setCountry(e.target.value);
           }}
@@ -187,7 +180,6 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             variant="standard"
             value={city}
             onChange={(e) => {
-              console.log(e);
               setCity(e.target.value);
               fetchChat();
             }}
@@ -209,9 +201,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
           </TextField>
         </FormControl>
       ) : null}
-      {city && chat ? (
-        <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p>
-      ) : null}
+      {city && chat ? <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p> : null}
       {user ? (
         <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>
       ) : (
@@ -231,7 +221,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
           Стать помощником
         </Button>
       )}
-    </form>
+    </div>
   );
 };
 

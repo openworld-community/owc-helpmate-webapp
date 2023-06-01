@@ -3,16 +3,19 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const WebApp = () => {
-  const { user, webApp } = useTelegram();
-  const router = useRouter();
+  const { user } = useTelegram();
+  const { push } = useRouter();
 
-  console.log('tg user', user);
   useEffect(() => {
-    console.log(user?.id);
     if (user?.id) {
-      router.push({
+      push({
         pathname: '/role',
         query: { user: user?.id },
+      });
+    } else {
+      push({
+        pathname: '/role',
+        query: { user: 1234 },
       });
     }
   }, [user]);

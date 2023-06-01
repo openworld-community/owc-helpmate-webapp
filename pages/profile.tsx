@@ -1,25 +1,60 @@
-import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
+import { useTelegram } from '../contexts/TelegramProvider';
+import { Button } from '@mui/material';
 import { supabase } from '../lib/initSupabase';
+import { MainButton } from '../components/MainButton';
 
-export const getServerSideProps = async function (context: GetServerSidePropsContext) {
-  const telegramUserId = context.query.user;
-  const role = context.query.role;
+const Profile = () => {
+  const { user } = useTelegram();
+  const { query, push } = useRouter();
 
-  const { data: userProfile, error } = await supabase.from('profiles').select('*').eq('id', telegramUserId).maybeSingle();
+  const handleClick = async () => {
+    await supabase.from('helpers').delete().eq('id', query.helper);
 
-  if (userProfile) {
+    push({
+      pathname: '/',
+    });
 
-  }
-
-  return {
-    props: { role },
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   };
-};
 
-const Profile = ({ role }: { role: string }) => {
-  // Show the user. No loading state is required
-  if (role === 'helper')
-    return <p>Спасибо, что стали помощником!</p>;
+  return (
+    <div
+      style={{
+        maxWidth: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        margin: '16px auto',
+      }}
+    >
+      <p>Спасибо, что стали помощником!</p>
+      {user ? (
+        <MainButton text="Перестать помогать" onClick={handleClick}></MainButton>
+      ) : (
+        <Button
+          variant="outlined"
+          color="secondary"
+          type="submit"
+          fullWidth
+          style={{
+            background: 'var(--button-color)',
+            color: 'var(--button-text-color)',
+            marginTop: '20px',
+            border: 'none',
+          }}
+          onClick={handleClick}
+        >
+          Перестать помогать
+        </Button>
+      )}
+    </div>
+  );
 };
 
 export default Profile;

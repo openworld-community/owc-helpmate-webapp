@@ -203,7 +203,7 @@ const Login = () => {
       ) : null}
       {city && chat ? <p>Для успешной регистрации вступите в чат по ссылке: {chat.invite}</p> : null}
       {user ? (
-        <MainButton text="Стать помощником" onClick={() => handleSubmit(city, country, chat)}></MainButton>
+        <MainButton text="Стать помощником" onClick={handleSubmit}></MainButton>
       ) : (
         <Button
           variant="outlined"
@@ -216,7 +216,7 @@ const Login = () => {
             marginTop: '20px',
             border: 'none',
           }}
-          onClick={() => handleSubmit(city, country, chat)}
+          onClick={handleSubmit}
         >
           Стать помощником
         </Button>

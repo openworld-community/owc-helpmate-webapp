@@ -5,19 +5,18 @@ import { useRouter } from 'next/router';
 import { supabase } from '../lib/initSupabase';
 
 const Role = () => {
-  const { user, webApp } = useTelegram();
-  const { push, query } = useRouter();
+  const { webApp, user } = useTelegram();
+  const { push } = useRouter();
   const [profile, setProfile] = useState<any>(null);
 
   const fetchProfile = async () => {
-    const { data: profile } = await supabase.from('profiles').select('*').eq('id', query.user);
+    const { data: profile } = await supabase.from('profiles').select('*').eq('id', user?.id);
 
     if (profile) {
-      console.log(profile[0]);
       setProfile(profile[0]);
     } else {
       // insert user to table if no profile
-      const { data } = await supabase.from('profiles').insert({ id: 1234 }).select();
+      const { data } = await supabase.from('profiles').insert(user).select();
 
       if (data) {
         setProfile(data);
@@ -29,7 +28,7 @@ const Role = () => {
     push({
       pathname: '/client_login',
       query: {
-        user: query.user,
+        user: user?.id,
         profile: profile?.id,
       },
     });
@@ -38,7 +37,7 @@ const Role = () => {
       redirect: {
         destination: '/client_login',
         query: {
-          user: query.user,
+          user: user?.id,
           profile: profile?.id,
         },
         permanent: false,
@@ -49,13 +48,13 @@ const Role = () => {
   const onHelperClick = () => {
     push({
       pathname: '/helper_login',
-      query: { user: query.user, profile: profile?.id },
+      query: { user: user?.id, profile: profile?.id },
     });
     return {
       redirect: {
         destination: '/helper_login',
         query: {
-          user: query.user,
+          user: user?.id,
           profile: profile?.id,
         },
         permanent: false,

@@ -6,10 +6,10 @@ import { MainButton } from '../components/MainButton';
 
 const Profile = () => {
   const { user } = useTelegram();
-  const { query, push } = useRouter();
+  const { push } = useRouter();
 
   const handleClick = async () => {
-    await supabase.from('helpers').delete().eq('id', query.helper);
+    await supabase.from('helpers').delete().eq('id', user?.id);
 
     push({
       pathname: '/',

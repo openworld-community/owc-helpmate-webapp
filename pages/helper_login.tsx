@@ -25,26 +25,23 @@ const Login = () => {
   const { push, query } = useRouter();
 
   const [helper, setHelperProfile] = useState<any>(null);
-  const [country, setCountry] = useState();
-  const [city, setCity] = useState();
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
   const [chat, setChat] = useState<any>(null);
   const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
   const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
 
   const handleSubmit = async () => {
     if (helper) {
-      await supabase
-        .from('helpers')
-        .update({ id: query.profile, chat: chat?.id || 1234 })
-        .eq('id', query.profile);
+      await supabase.from('helpers').update({ id: user?.id, chat: chat?.id }).eq('id', user?.id);
     } else {
-      await supabase.from('helpers').insert({ id: query.profile, chat: chat?.id || 1234 });
+      await supabase.from('helpers').insert({ id: user?.id, chat: chat?.id });
     }
 
     push({
       pathname: '/profile',
       query: {
-        helper: query.profile,
+        helper: user?.id,
       },
     });
 
@@ -52,7 +49,7 @@ const Login = () => {
       redirect: {
         destination: '/profile',
         query: {
-          helper: query.profile,
+          helper: user?.id,
         },
         permanent: false,
       },
@@ -60,7 +57,7 @@ const Login = () => {
   };
 
   const fetchHelperProfile = async () => {
-    const { data } = await supabase.from('helpers').select('*').eq('id', query.profile);
+    const { data } = await supabase.from('helpers').select('*').eq('id', user?.id);
     return data;
   };
 

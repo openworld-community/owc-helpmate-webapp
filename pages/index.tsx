@@ -12,11 +12,6 @@ const WebApp = () => {
         pathname: '/role',
         query: { user: user?.id },
       });
-    } else {
-      push({
-        pathname: '/role',
-        query: { user: 1234 },
-      });
     }
   }, [user]);
 

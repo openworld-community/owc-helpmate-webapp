@@ -42,6 +42,9 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
 
     useEffect(() => {
         webApp?.MainButton.onClick(handleSubmit)
+        return () => {
+            webApp?.MainButton.offClick(handleSubmit)
+          }
       }, [country, city, chat, request])
 
     const handleSubmit = async () => {

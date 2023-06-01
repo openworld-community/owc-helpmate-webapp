@@ -32,6 +32,9 @@ const Login = () => {
 
   useEffect(() => {
     webApp?.MainButton.onClick(handleSubmit)
+    return () => {
+      webApp?.MainButton.offClick(handleSubmit)
+    }
   }, [country, city, chat])
 
   const handleSubmit = async () => {

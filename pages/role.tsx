@@ -93,7 +93,7 @@ const Role = () => {
           border: 'none',
         }}
       >
-        Клиент
+        Нужна помощь!
       </Button>
       <Button
         variant="outlined"
@@ -107,7 +107,7 @@ const Role = () => {
           border: 'none',
         }}
       >
-        Помощник
+        Хочу стать помощником
       </Button>
     </div>
   );

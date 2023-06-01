@@ -44,8 +44,8 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
         webApp?.MainButton.onClick(handleSubmit)
         return () => {
             webApp?.MainButton.offClick(handleSubmit)
-          }
-      }, [country, city, chat, request])
+        }
+    }, [country, city, chat, request])
 
     const handleSubmit = async () => {
         console.log(request, country, city);
@@ -71,7 +71,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
     useEffect(() => {
         console.log('set callback', webApp, handleSubmit)
         webApp?.MainButton.onClick(handleSubmit)
-      }, [webApp]);
+    }, [webApp]);
 
     const [countries, setCountries] = useState<{ [x: string]: any }[] | null>([]);
     const [cities, setCities] = useState<{ [x: string]: any }[] | null>([]);
@@ -226,6 +226,9 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
                         InputLabelProps={{
                             sx: labelStyle,
                             shrink: true,
+                        }}
+                        InputProps={{
+                            sx: textFieldStyle
                         }}
                         variant="standard"
                         placeholder="Опишите ваш запрос или проблему"

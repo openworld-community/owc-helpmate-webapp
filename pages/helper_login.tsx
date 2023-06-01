@@ -180,6 +180,7 @@ const Login = () => {
               setCity(e.target.value);
               fetchChat();
             }}
+            InputLabelProps={{ sx: labelStyle }}
             SelectProps={{
               sx: textFieldStyle,
               MenuProps: {

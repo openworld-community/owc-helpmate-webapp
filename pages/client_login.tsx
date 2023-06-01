@@ -127,7 +127,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
             </div>
         );
     }
-    
+
     // Show the user. No loading state is required
     return (
         <form
@@ -203,7 +203,7 @@ const Login = ({ telegramUserId, profile }: { telegramUserId: string, profile: a
                         {cities &&
                             cities.map((item) => {
                                 return (
-                                    <MenuItem key={item.id} value={item.name}>
+                                    <MenuItem key={item.id} value={item.id}>
                                         {item.name}
                                     </MenuItem>
                                 );
